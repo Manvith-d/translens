@@ -68,6 +68,27 @@ assets/sample_texts/sample_policy_en.txt
 > Note: For larger documents, a vector index (embeddings + retrieval) can be added. The current version uses a robust "context stuffing" strategy with a user-controlled context size slider.
 
 ---
+## 🖼️ App Preview
+
+### 🪄 1️⃣ Main Interface
+![TransLens Main Interface](assets/screenshots/Translens.png)
+
+### ✍️ 2️⃣ Input & Summary
+![Input & Summary](assets/screenshots/input_summary.png)
+
+### 🌐 3️⃣ Translated Summary (English)
+![Translated Summary English](assets/screenshots/translated_summary_english.png)
+
+### 🪶 4️⃣ Translated Summary (Hindi)
+![Translated Summary Hindi](assets/screenshots/translated_summary_hindi.png)
+
+### 🗣️ 5️⃣ Translated Summary (Kannada)
+![Translated Summary Kannada](assets/screenshots/translated_summary_kannada.png)
+
+### 💡 6️⃣ Q&A Section
+![Q&A Section](assets/screenshots/qa_section.png)
+
+---
 
 ##  Privacy & Responsible Use
 - No data is stored outside your session.
