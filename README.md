@@ -1,129 +1,76 @@
+<p align="center"><img src="project-banner.svg" alt="TRANSLENS: Public information, made more accessible." width="100%"/></p>
 
-# TransLens - Accessible Public Information
+<h1 align="center">Translens</h1>
 
-**TransLens** makes complex government and healthcare information easier to understand.
-- Paste text or upload a PDF/TXT
-- Get a **plain-language summary**
-- **Translate** the summary into your preferred language
-- **Ask questions** grounded in the provided document
+<p align="center">Public information, made more accessible.</p>
 
-Built for **accessibility**, **civic inclusion**, and **responsible AI**.
+<p align="center"><code>Python</code> &nbsp; <code>Streamlit</code> &nbsp; <code>OpenAI API</code> &nbsp; <code>pypdf</code></p>
 
----
+<p align="center"><a href="#see-it-in-action">See it in action</a> · <a href="#how-it-works">How it works</a> · <a href="#quick-start">Quick start</a> · <a href="#technology-and-code-map">Technology and code map</a> · <a href="#scope-and-data-handling">Scope and data handling</a></p>
 
-##  Features
-- **Plain-Language Summaries** - simple explanations for general audiences
-- **Multi-language Translation** - translate summaries via the same LLM (no extra APIs)
-- **Grounded Q&A** - ask questions answered *only* from your uploaded/pasted content
-- **PDF & Text Support** - upload a document or paste content directly
-- **No external storage** - demo keeps data in your session only
+<table><tr><td width="33%" valign="top"><h3>Understand the document</h3><p>Turn dense public information into a plain-language summary.</p></td><td width="33%" valign="top"><h3>Cross language barriers</h3><p>Generate translations in the selected interface language.</p></td><td width="33%" valign="top"><h3>Ask focused questions</h3><p>Use the document context to guide follow-up answers.</p></td></tr></table>
 
 ---
 
-##  Tech Stack
-- Python, Streamlit
-- OpenAI Chat Completions API (e.g., `gpt-4o-mini`, fallback `gpt-3.5-turbo`)
-- PyPDF for text extraction from PDFs
+## See it in action
 
-> Why not a separate Translate API? To reduce dependencies and keep setup simple, translations are performed by the LLM itself with explicit instructions.
+![TransLens interface](assets/screenshots/Translens.png)
 
----
+<table><tr><td width="50%"><img src="assets/screenshots/input_summary.png" alt="Input and plain-language summary"/><br/><b>Understand the document</b></td><td width="50%"><img src="assets/screenshots/Translated_summary_hindi.png" alt="Hindi translated summary"/><br/><b>Read in another language</b></td></tr></table>
 
-##  Quickstart (Local)
+## How it works
 
-```bash
-git clone https://github.com/<your-username>/translens.git
+![TransLens document workflow](project-workflow.svg)
+
+PDF extraction and text cleanup feed the summarization prompt. The summary is translated into the selected language, while questions use a limited portion of the original document as context. The current approach uses context stuffing rather than a vector database.
+
+## Quick start
+
+```sh
+git clone https://github.com/Manvith-d/translens.git
 cd translens
-python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
+```
 
-# Add your OpenAI key
-cp .streamlit/secrets.toml.example .streamlit/secrets.toml
-# Edit the file and paste your key
-# or: export OPENAI_API_KEY=sk-...
+Create `.streamlit/secrets.toml` and set `OPENAI_API_KEY` locally, then start the app:
 
+```sh
 streamlit run app.py
 ```
 
-Open your browser at the URL shown (usually `http://localhost:8501`).
+Keep the secrets file out of Git. On Windows, activate with `.venv\Scripts\activate`. Model access depends on the configured OpenAI account; the source preserves the original model and fallback choices.
 
----
+**Try the included example:** open `assets/sample_texts/sample_policy_en.txt`, choose a language, select **Simplify & Translate**, then ask “What documents are required?”
 
-##  Try It Fast
-Use the sample file:
-```
-assets/sample_texts/sample_policy_en.txt
-```
-- Upload it, click **"🔎 Simplify & Translate"**
-- Then ask a question like: *"What documents are required?"*
+## Technology and code map
 
----
+| Component | Technology / path |
+| --- | --- |
+| Web interface | Streamlit in `app.py` |
+| Summarization and translation | OpenAI Chat Completions API |
+| PDF extraction | pypdf |
+| Text preparation | `utils/text_utils.py` |
+| Prompt templates | `utils/prompts.py` |
+| Demo input | `assets/sample_texts/` |
 
-##  How It Works
-1. **Clean & Clamp** input text for safe token limits
-2. **Summarize** with a plain-language system prompt
-3. **Translate** the summary to the target language (LLM-based)
-4. **Q&A**: Stuff the (truncated) context and answer strictly from it
+<details><summary><b>More interface views</b></summary>
 
-> Note: For larger documents, a vector index (embeddings + retrieval) can be added. The current version uses a robust "context stuffing" strategy with a user-controlled context size slider.
+![Document questions](assets/screenshots/qa_section.png)
+![Kannada translation](assets/screenshots/translated_summary_kannada.png)
 
----
-## 🖼️ App Preview
+</details>
 
-### 🪄 1️⃣ Main Interface
-![TransLens Main Interface](assets/screenshots/Translens.png)
+## Scope and data handling
 
-### ✍️ 2️⃣ Input & Summary
-![Input & Summary](assets/screenshots/input_summary.png)
+The application does not implement its own persistent document store, but document text is sent to the OpenAI API for processing. Use appropriate demonstration documents when trying it. Prompts ask for document-grounded answers; this is not a guarantee of correctness. Verify generated summaries and translations against the source, especially for healthcare or public-policy decisions.
 
-### 🌐 3️⃣ Translated Summary (English)
-![Translated Summary English](assets/screenshots/translated_summary_english.png)
+## Future directions
 
-### 🪶 4️⃣ Translated Summary (Hindi)
-![Translated Summary Hindi](assets/screenshots/translated_summary_hindi.png)
+Retrieval for longer documents, literacy-level controls, audio output, and multi-document comparison are possible extensions, not current functionality.
 
-### 🗣️ 5️⃣ Translated Summary (Kannada)
-![Translated Summary Kannada](assets/screenshots/translated_summary_kannada.png)
+## Author and license
 
-### 💡 6️⃣ Q&A Section
-![Q&A Section](assets/screenshots/qa_section.png)
+Manvith Reddy Dalli. MIT license; see [LICENSE](LICENSE).
 
----
-
-##  Privacy & Responsible Use
-- No data is stored outside your session.
-- Always verify AI-generated guidance with official sources.
-- Prefer community review for deployment in sensitive contexts.
-
----
-
-##  Project Structure
-```
-translens/
-├── app.py
-├── requirements.txt
-├── README.md
-├── utils/
-│   ├── __init__.py
-│   ├── text_utils.py
-│   └── prompts.py
-├── assets/
-│   └── sample_texts/
-│       └── sample_policy_en.txt
-└── .streamlit/
-    └── secrets.toml.example
-```
-
----
-
-##  Roadmap
-- [ ] Retrieval with embeddings (OpenAI `text-embedding-3-small`)
-- [ ] Prompted literacy-level control (e.g., 5th/8th grade reading)
-- [ ] Audio mode (text-to-speech) and WhatsApp integration
-- [ ] Usage analytics & feedback collection
-- [ ] Multi-file compare + bilingual outputs side-by-side
-
----
-
-##  License
-MIT
